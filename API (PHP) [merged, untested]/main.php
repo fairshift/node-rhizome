@@ -62,7 +62,8 @@
 */
 
 
-  session_start(); //  ... a list of API functionalities in "main/include.php"
+  session_start(); // authenticate(), loginFacebok(), loginTwitter() are imported in "main/include.php", with the rest of components  
+
   include('local/config.php'); // Database & social media accounts
   include('includer.php'); // Script, which allows for customizations to API (in "_custom/$domain/" folder)
 
@@ -70,13 +71,18 @@
   dbWrapper($account); // $GLOBALS['db'] stores database object
   unset($account);
 
+
 /*
 
   Ethereum(.org) decentralized platform charges computing power to the user (in amount of Ether as currency), providing incentive for script efficiency. Here, ...
 
     * Interactions with this API are logged, tracking changes to data states, enabling data validation, access control and measuring script efficiency
     * Such pattern can be imagined to facilitate validation of encrypted data (requires use of private-public key pairs by users) - eg.: http://enigma.media.mit.edu/
+
+  With Ethereum's blockchain, user accounts are hashes that already exist
+
 */
+
   $transaction = transaction(array('api_call' => $_GET['calls']));
 
 
