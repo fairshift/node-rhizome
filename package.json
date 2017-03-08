@@ -1,0 +1,23 @@
+{
+  "name": "node-rhizome",
+  "version": "0.0.1",
+  "description": "Package to augment existing data collections !!! needs to be revisited",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fairshift/node-rhizome"
+  },
+  "author": "...?",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fairshift/node-rhizome/issues"
+  },
+  "homepage": "...?",
+  "dependencies": {
+    "simpl-schema": "0.8.3",
+    "knex": "0.12.6",
+    "lodash": "4.17.4",
+    "bignumber.js": "4.0.0",
+    "web3": "0.18.2"
+  }
+}
