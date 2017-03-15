@@ -1,27 +1,10 @@
-/*
-	# SQL database connector Knex config
- 	^ a list of functions would need to be exposed to application developer (!!! revisit):
- 	- ...	
-
-*/
-
-import knex from 'knex';
-import knexfile from '../../knexfile';
-/* Apollo GraphQL developers' notice (where surrounding lines were taken from):
-   
-   "Eventually we want to wrap Knex to do some batching and caching, but for
-   now this will do since we know none of our queries need it" */
-export default knex(knexfile[process.env.NODE_ENV || 'development']);
-
-
-
 import SimpleSchema from 'simpl-schema';
 import lodash from 'lodash';
 import {Integer, UniqueInteger, UniqueString} from 'types';
 
 // Generate tables from schema array (before applying SimpleSchema on it), and then createTable with Knex
 
-export const createTable = function(name, schemaArray){
+export const createTable = function(knex, name, schemaArray){
 
 	// Create table
 
@@ -59,11 +42,6 @@ export const createTable = function(name, schemaArray){
 			   		 		max_length = 0;
 			   		 	}
 
-			   		 	if(_.isEqual(schemaArray[field], Text)){
-
-			   		 		table.text(field);
-			   		 	}
-
 			   		 	if(typeof obj.type !== 'undefined'){
 
 			   		 		if(obj.type == String){
@@ -73,6 +51,10 @@ export const createTable = function(name, schemaArray){
 			   		 			} else {
 			   		 				table.string(field);
 			   		 			}
+			   		 		}
+
+			   		 		if(typeof obj.sqlType !== 'undefined' && obj.sqlType == 'Text'){
+			   		 			table.text(field);
 			   		 		}
 
 			   		 		if(obj.type == SimpleSchema.Integer){ // also works for dates

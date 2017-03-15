@@ -10,15 +10,15 @@
 	          - To integrate this package with an existing system
 */
 
-// To generate a unique agent entity ID
+// To generate a unique agent ID, with ability to get a list of inputs back after it's been generated
 
-export function agentId(entityType, // entityType - such as 'user_id', 'group_id', 'ngo_id', ...
-                        id,			// unique identifier for entityType
-                        service){   /* Unique service identifier (such as its domain)
+export function agentId(collection, // accounts collection name, such as 'user', 'group', 'circle', 'user_pseudonym', ...
+                        id,			// unique identifier of user within accounts collection
+                        service){   /* Unique service identifier (such as protocol&domain)
                         
                         Some space for cross-platform imagination
 
 	*/
 
-  	return service+"-"+entityType+"_"+id;
+  	return "{"+service+"}-{"+entityType+"}-{"+id+"}";
 }

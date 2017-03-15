@@ -17,11 +17,6 @@ import SimpleSchema from 'simpl-schema';
 import {Integer} from 'types';
 
 
-const actionSchema;
-
-// To be generated with use of "actionSchema" function (found below in this document),
-// by selecting "actions" definitions (as defined within scope of application)
-
 
 const actions = {}; // Suggested layout of actions - extend this object with your own definitions
 
@@ -33,8 +28,12 @@ const actions = {}; // Suggested layout of actions - extend this object with you
 */
 
 // Actions, related to this package, possible within bounds of this online service
-actions.platform = { stem: '+med', cut: '',
-                     /*...*/ };
+actions.platform = { create: '+d', publish: '+ed', unpublish: '+ed',
+                     stem: '+med', merge: '+d', root: '+ed',
+                     mutate: '+d', store_draft: 'stored_draft', edit_draft: 'draft_edited',
+                     request_translation: 'requested_translation', translate: '+d',
+                     strip: '+ped',
+                     close: '+d', remove: '+d' };
 
 // Actions, with which this package imports data from external, integrated online services
 actions.imported = {};
@@ -42,33 +41,15 @@ actions.imported = {};
 // Actions, requested from users by this package, which were made offline at another point in time
 actions.offline = {};
 
-// 'eventsourcing' action types - not sure if this is going to be used !!! revisit
+/* 'eventsourcing' - this list probably won't be used anywhere in code of this package
 actions.types = [ 
-  '+', // Data part was added
-  '-', // Data part was removed
-  '~'  // Data part was modified
-];
+  '+', // Field was added
+  '-', // Field was removed
+  '~'  // Field was modified
+]; */
 
 export actions;
 
-const actionSchema = function(actionsArray){ // agentId is unified (service+"-"+entityType+"_"+id); isn't 'user_id' or 'circle_id'
-
-  var schemaArray = {};
-
-  for(var action in actionsArray) {
-   if(actionsArray.hasOwnProperty(action)) {
-
-    var enacted = action + actionsArray[action].substr(1);
-
-      for(n = 0; n < agentsArray.length; n++){
-
-        schemaArray[enacted+ "_" + agentsArray[n]] = String;
-        schemaArray['timestamp_'+enacted] = Integer;
-    }
-  }
-
-  return schemaArray; // !!! revisit - generate SimpleSchema here?
-}
 
 /*
 

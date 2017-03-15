@@ -1,13 +1,15 @@
 /*
 
-	# node-rhizome: Package to augment existing data collections
+	# node-rhizome: Package to augment existing data collections with a list of general data structures
 
-	  - additional, generalized data structures (and functionalities, to be found in another folder !!!)
+	  - additional, generalized data structures (and functionalities, to be found in another folder !!! revisit)
 	  - it could be using a NoSQL or a relational SQL database
 
+	  Challenge: fetching related data nodes (schema and GraphQL mapping !!! revisit)
+
 	  Challenges expected with NoSQL:
-	  - read / write permissions to various parts of data structure,
-	  - searching through data structure,
+	  - read / write permissions to various parts of data scheme,
+	  - searching through database,
 	  - maintaining schema and data structure consistency
 
 	  SQL only for now  with Knex SQL connector (not to overwhelm with amount of work with MongoDB and ElasticSearch),
@@ -30,68 +32,44 @@ import {agentId} from 'agent';
   - Allowing agency (ability to perform actions) for various types of user and group accounts
 
     Function: agentId() takes in three parameters ...
-  - entityType - such as 'user_id', 'group_id', 'ngo_id', ...
+  - entityType - such as 'user_id', 'group_id', 'pseudonym_id', ...
   - id - unique identifier for entityType
   - service - unique service identifier (such as its domain)
 
 */
 
-import {getRhizome} from 'getRhizome';
-import {updateRhizome} from 'updateRhizome';
-import {search} from 'search';
+import Rhizome from 'rhizome';
+
 
 /* 
 
 	# Function list:
 
-	- getRhizome({data_provider,
-				  collection,
-				  document_id,
-				  branch_id,
-				  languages,
-				  cascade_level, //how many levels of related nodes to get? (default: 1)
-				  agentId,
-				  config,
-				  datasets});
+	Rhizome.get({node_id,
+				 collection,
+				 document_id,
+				 languages,
+				 features,
+				 customSchema},
+				 knex);
 
-	- updateRhizome( !!! revisit )
+	Rhizome.update( !!! revisit )
 
-	- search( !!! revisit )
-
-	# Function: getRhizome({data_provider, collection, document_id, branch_id},
-							agentId,
-							rhizome_config,
-							languages,
-							datasets = null)
+  ( ? searchRhizome )
 
 
-	  Output: above functions return following (sub)structures (refer to schema.js for field definitions)
-										   			 (if agentId has sufficient access rights/privileges)
+	# Output: above functions return following (sub)structures (refer to schema.js for definitions of specific substructures)
 
-	  {data_provider}_{collection}_{entry_id}: {
-	  	stem,
-	  	branch {
-	  	  {id}: {
-			... 	// see 'branch' definition
-			state   // recent manifested state, in user's language(s - currently just one)
-			rooted,
-			merged,
-			{dataset}, // additional datasets
-			{dataset},
-			...
-		  }
-	  	},
-	    {dataset}, // related datasets
-	    {dataset},
-	    ...
-	  },
-	  ...,
-
-	  related: { // related data nodes
-		{data_provider}_{collection}_{entry_id}: {
-		  // structure similar to the above
-		},
-		...
+	  node-rhizome: {
+	  	node,
+	  	statechain,
+	  	draft,
+	  	translate,
+	  	eventsource,
+	  	branch_root,
+	  	branch_merge,
+	  	tree_hypernym,
+	  	tree_synset,
 	  }
 
 */
