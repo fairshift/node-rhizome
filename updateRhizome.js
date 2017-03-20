@@ -1,4 +1,4 @@
-<?php //Porting this to javascript in context of this package
+<?php // Porting past work to Javascript in context of this package
 
   //Create / update content node - lines, (localized) states, values, keywords, words (histogram), 
     function updateNode(){

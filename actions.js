@@ -14,7 +14,7 @@
 */
 
 import SimpleSchema from 'simpl-schema';
-import {Integer} from 'types';
+import {Integer} from 'helpers/types';
 
 
 

@@ -1,3 +1,5 @@
+// Work in progress
+
 import {node as nodeSchema, stem_sql, main_branch_sql, branch_root, branch_root, statechain, validation, draft, translate, eventsource, tree_synonym, tree_hypernym} from 'schema';
 import SimpleSchema from 'simpl-schema';
 
@@ -173,7 +175,7 @@ const getRhizome = function(args, knex = null){
 
 
 
-<?php //Porting this to javascript in context of this package
+<?php // Porting past work to Javascript in context of this package, soon
 
 function getRhizome(){ //A call to load a node and N(=horizon-cascade) levels of related nodes comes...
 

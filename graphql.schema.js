@@ -1,17 +1,26 @@
 //import { property, constant } from 'lodash';
 
-import {}
+import {actionDefinitions} from 'graphql.actions';
 
-export const schema = [`
+export schema = function($collectionFragments){
+
+return [`
 
 type Node {
-  id: Int!
+  id: String!
+  data_provider: String
+  collection: String
+  document_id: String
 
-  # Recent data state in a requested language
-  state(language_code: String): RecentState
+  current_state_id: String
 
-  # Requests to help translate into a certain language
-  helpTranslate(from_language_code: String, to_language_code: String): [TranslateRequest]
+  statechain_count: Int
+
+  # Current data state in requested language(s)
+  state(language_code: String, language_codes: String): [State]
+
+  # Drafts currently in works
+  drafts(language_code: String, language_codes: String): [Draft]
 
   # History of data states
   statechain(
@@ -24,60 +33,82 @@ type Node {
     # The number of items to fetch starting from the offset, for pagination
     limit: Int
   ): [State]
-
-  # Events, modifying data state
-  events(language_code: String, state_id: Int, draft_id: Int, offset: Int, limit: Int): [EventSource]
-
-  # Rhizome
-  rhizome(language_code: String, offset: Int, limit: Int): Rhizome
-
-  # Data node, categorized in a tree
-  tree(language_code: String, offset: Int, limit: Int): Tree
-
-  # List of related data nodes (!!! revisit - could also be implemented within above types)
-  related(language_code: String): [Node]
 }
 
 
 
+# State type needs custom Fragments to implement various types of data that can be stored in application's database
 type State {
-  node_id: Int
+  id: String
+  timestamp: Int
   language_code: String
+  machine_translation_provider: String
 
   # Manifested state - if user can view
-  manifested: Manifested
+  data: Data
 
-  # Draft currently in works - if user can edit
-  draft: Draft
-}
+  # Open requests to translate and bridge languages
+  translate_requests: [TranslateRequest]
+  translate_requests_count: Int
 
-# This schema needs to be customized with Fragments, depending on types of data that can be stored in application's database
-type Manifested {
-  id: Int
-  timestamp: Int
-  machine_translation: Boolean
+  # Rhizome
+  rhizome: [Rhizome]
 
-  ${collectionFragments}
+  # Data node, categorized in a tree
+  # tree: Tree - !!! revise
 
-  signed: [Signed]
+  # List of events, contributing to this data state
   events: [EventSource]
+  events_count: Int
+
+  # State was signed by following people and groups (agents)
+  # signed: [Signed]
+  # signed_count: Int
 
   statechain_hash: String
 
-  # (!!! revisit) ethereum_record_id: String (something like this, stored through Ethereum's web3.js client)
+  # statechain_hash_ethereum: String (stored with Ethereum's web3.js client) - !!! revise
+  # Past manifested states could be modified and rehashed, until stored on an external, immutable storage medium
   # http://ethdocs.org/en/latest/contracts-and-transactions/accessing-contracts-and-transactions.html
+
+  # List of related data nodes (!!! revise - could also be implemented within above types)
+  # related(language_code: String): [Node]
 }
 
-# This schema needs to be customized with Fragments, depending on types of data that can be stored in application's database
+# Draft type needs custom Fragments to implement various types of data that can be stored in application's database
 type Draft {
-  id: Int
+  id: String
   timestamp: Int
-  machine_translation: Boolean
+  language_code: String
+  machine_translation_provider: String
 
-  ${collectionFragments}
+  # Draft state - if user can view
+  data: Data
 
-  signed: [Signed]
+  # Rhizome
+  rhizome: [Rhizome]
+
+  # Data node, categorized in a tree
+  tree: Tree
+
+  # List of events, contributing to this data state
   events: [EventSource]
+  events_count: Int
+
+  # State was signed by following people and groups (agents)
+  signed: [Signed]
+  signed_count: Int
+}
+
+type Data {
+  ${collectionFragments}
+}
+
+
+
+type TranslateRequest {
+  from_language_code: String
+  to_language_code: String
 }
 
 
@@ -88,7 +119,7 @@ type EventSource {
   action: String
 
   added: [FieldValue]
-  modified: [FieldMutationDiff]
+  modified: [FieldDifference]
   removed: [Field]
 
   eventchain_hash: String
@@ -111,70 +142,54 @@ type Field {
 
 
 
+# Rhizome - data node's map of relations within plurality of co-evolving contents 
 type Rhizome {
-  # Where data node stemmed from (undefined when it didn't stem)
-  stem_node_id: Int
-  stem_state_id: Int
+  node_id: String
+  state_id: String
 
-  # Which data node was defined as main branch, if any (perhaps intending to merge its contents there)
-  main_branch_node_id: Int
-  main_branch_state_id: Int
+  relation: [RelationType]!
+  related_nodes: [Node]!
+  related_count: Int
 
-  branch_root: [BranchRoot]
-  branch_merge: [BranchMerge]
-}
-
-type BranchRoot {
-  state_id: Int
-  root_node_id: Int
-  root_state_id: Int
-}
-
-type BranchMerge {
-  state_id: Int
-  merge_node_id: Int
-  merge_state_id: Int
+  # Could this structure embody various relations among data, including cause and effect?
+  # No - database schemas are designed to serve this purpose, already - without needing to learn another layer
+  # Yes - could be a unifying layer among various DB schemas (structures of data nodes and relations),
+  #       transpiling data into a predefined format
 }
 
 
 
 type Tree {
-  tree_hypernym: [Hypernym]
-  tree_synset: [Synset]
+  synsets: [Synset]
+}
+
+type Synset {
+
+  # Can one node reside in many trees? type: TreeType (!!! revise)
+
+  hypernym: Hypernym
+  synonyms: [Synonym]
 }
 
 type Hypernym {
 
 }
 
-type Synset {
+type Synonym {
 
 }
 
 `];
 
+};
+
 export const resolvers = {
-  Rhizome: {
+  Node: {
     repository({ repository_name }, _, context) {
       return context.Repositories.getByFullName(repository_name);
     },
-    postedBy({ posted_by }, _, context) {
-      return context.Users.getByLogin(posted_by);
-    },
-    comments({ repository_name }, { limit = -1, offset = 0 }, context) {
-      return context.Comments.getCommentsByRepoName(repository_name, limit, offset);
-    },
     createdAt: property('created_at'),
-    hotScore: property('hot_score'),
-    commentCount({ repository_name }, _, context) {
-      return context.Comments.getCommentCount(repository_name) || constant(0);
-    },
-    vote({ repository_name }, _, context) {
-      if (!context.user) return { vote_value: 0 };
-      return context.Entries.haveVotedForEntry(repository_name, context.user.login);
-    },
   },
-
   Comment: {
     createdAt: property('created_at'),
     postedBy({ posted_by }, _, context) {

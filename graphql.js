@@ -1,4 +1,4 @@
-// Export these fragments of Queries, Mutations and Subscriptions to root GraphQL schema definitions
+// Export these Queries, Mutations and Subscriptions to root GraphQL schema definitions
 
 export const schema = [`
 
@@ -30,7 +30,7 @@ type QueryNodeRhizome {
 
   ): State
 
-  # Rhizome - data node, mapped in a rhizome, within plurality of co-evolving contents
+  # Rhizome - data node, mapped in a rhizome, crossroads in plurality of co-evolving contents
   rhizome(
 
     # Find by node_id - returns most recent state
@@ -149,7 +149,48 @@ type QueryNodeRhizome {
 
 type MutateNodeRhizome {
 
-  stemNode(): Node
+  stem(
+    node_id: Int,
+    state_id: Int,
+    language_code: String
+  ): Node
+
+  translate(
+    # Select by node_id
+    node_id: Int,
+
+    # Select by collection name and document_id
+    collection: String,
+
+    # Select by collection name and document_id
+    document_id: String,
+
+    from_language_code: String,
+    to_language_code: String,
+
+    state: State,
+    machine_translation: Boolean
+
+  ): Node
+
+  requestTranslation(
+    # Select by node_id
+    node_id: Int,
+
+    # Select by collection name and document_id
+    collection: String,
+
+    # Select by collection name and document_id
+    document_id: String,
+
+    from_language_code: String,
+    to_language_code: String,
+
+  ): Node
+
+  # mapRhizome(node_id: Int): Rhizome
+
+  # mapTree(node_id: Int): Tree
 }
 
 type SubscribeNodeRhizome {

@@ -1,87 +1,132 @@
-import SimpleSchema from 'simpl-schema';
-import {Text, Integer} from '../simpleschema-sql/types';
+
+/* 'node-rhizome' package uses schemas defined in this file, to facilitate a variety of functions,
+	among them to validate data inputs before storing data state in database.
+
+	It is applied on per data node basis, which is an identifiable data object (output of a function) */
+
+import * from 'json-schema'; // http://json-schema.org/ format
+import * from '../meteor-json-simple-schema/json-simple-schema.js'; // transpile from json-schema to simpl-schema
+import SimpleSchema from 'simpl-schema';							// library, which validates inputs 
+																	//(compatible with Meteor/MongoDB)
+
+import {Text, Integer} from '../node-rhizome-helpers/types';
 import lodash as _ from 'lodash';
 
-/* Type 'rights' and / or 'privileges': adds a list of possibilities to read and write to state of data
-    (when disabled for a collection, rules of data manipulation can be defined elsewhere in application) 
 
-   Weighing, where to evaluate permissions:
 
-   - within this package: can make less calls to database, though this needs storage in 
-   - outside of this package: can reuse application code and database */
-import {actions, actionSchema, permission} from 'actions';
+/* A list of actions that create and modify state of data, defined within scope of 'node-rhizome' package
+  (while rules of access to data are defined in scope of application) */
 
-/* Question: Should each branch of a node have an entry of its own in its collection? 
-  		  [X] Yes, because: it's easier to attach to existing database layouts
-  		   - No, because: this way there's less entries in database, and more pressure on those entries to be corrected
-  		   - Both options could be possible, leaving decision to maintainers of each branch (if so programmed in application) */
+import {actions} from 'actions';
 
-const node = {
 
-  id: { type: String, unique: true }, // identifier, unique across a database
-  									  //(!!! needs a solid way to compute)
+var node = {
 
-  data_provider: String, // example cases (!!! revisit): URL of a service's API; protocol/network of a distributed service
+  id: { type: String, unique: true }, 
+  /* Data node identifier key, unique for each data node
+
+  	 Cross-platform implementation (use of 'node-rhizome' package peer-to-peer or among connected services)
+  	 When writing a new data node, 'node-rhizome' checks if generated id is unique with distributed tracker
+  	 																				  - DHT, see more below */
 
   // Which data collection is stored ( <- NoSQL; in case of a relational SQL read as table_name and entry_id )
-  collection: String, 					// in case of an external service API (REST or GraphQL), this equals call
+  type: String, 		// in case of an external service API (REST or GraphQL), this equals call
   document_id: Integer,	// ... external service API: this equals id param (or composite of params)  
 
-  // Current state of data node (there can be multiple states stored, while one is currently chosen)
-  sql: {
-   current_state_id: Integer
-  },
-  /*nosql: { // NoSQL IDs are not necessarily numeric and incremental (as seen with MongoDB)
-   current_state_id: String (!!! revisit if necessary)
-  },*/
+  // Current, main branch of data node (while multiple branches and translations can be contained)
+  main_branch_id: Integer,
 
-  eventsWithFields: [actions.platform.create, actions.platform.close, actions.platform.remove],
+  eventsWithState: [actions.platform.create, actions.platform.close, actions.platform.remove],
   events: [actions.platform.delete]
 };
 
-	const stem_sql = { // Where this content stemmed / evolved from (could be undefined)
+/* Ideation to support peer-to-peer completion and validaton of a data node:
+  'node_recent_hash' and 'node_dht', contained in 'node' schema */
 
-	  stem_node_id: String,
-	  stem_state_id: Integer
+	const node_recent_hash = {	// Hashed recent state of a data node, signifying that a data node has been modified
+								//(for example, with Git protocol this part of branch is called HEAD)
+
+		timestamp: String,
+		hash: String
+	}
+
+	node = _.merge({}, node, node_recent_hash);
+
+	const node_dht = {
+
+	/*	In case this data node is to be distributed among various services
+		DHT - "distributed sloppy hash table" (DHT) for storing peer contact information for "trackerless" torrents. 
+		In effect, each peer becomes a tracker. http://bittorrent.org/beps/bep_0005.html 
+
+		Typically stores a list of data providers and a way to access each - ${host}:${port} */
 	};
 
-	const main_branch_sql = { // Versioning and branches - main branch of a certain data point (can point at itself)
+/* 	
+	Type 'rhizome': data node's state of mapped relations within plurality of co-evolving contents
+		 		  - data node's context can be as important as its state,
+		 		    hence relations can be included in validation (related data nodes need to be stored 'node-rhizome')
 
-	  main_branch_node_id: String,
-	  main_branch_state_id: Integer,
+   'node-rhizome' defines:
+  - relations, 'contained' within one distinct data node (data structure, kept internally of 'node-rhizome', only)
+  -'external' relations, among inter-related but distinct data nodes
+
+	-------------  (relation schema is also defined in graphql.relations.js, seperately)
+*/
+
+	const rhizome_sql = { // relations change as time passes, and are tied to data node's state
+
+	  node_id: String,
+	  state_id: Integer
 	};
 
-// ^ 'node_rhizome' contains - Augmented node data structure types as listed below:
+	const rhizome_related_node = {
 
-// Type 'rhizome': enables plurality of content - co-evolution by stemming multiple branches of content
-
-	const branch_root = { // where a branch has roots
-
-	  sql: { 
-	  	node_id: String
-	  },
-
-	  state_id: Integer,
-
-	  root_node_id: Integer,
-	  root_state_id: Integer, // pointer to node state, where branch was stemmed
-
-	  eventsWithFields: [actions.platform.create, actions.platform.remove],
-	  events: [actions.platform.delete]
+	  related_node_id: String,
+	  related_state_id: Integer,
+	  related_hash: String
 	};
 
-	const branch_merge = { // where a branch merged into another branch
+	const rhizome_related_contained = {
+	  /*
+		All relations, 'contained' within one distinct data node,
+		have one of the following types of rhizomatic relations:
 
-	  sql: { 
-	  	node_id: String,
-	  },
+		TRANSLATION (translations of a data node)
+		STEM (where this content stemmed / evolved from))
+		MERGED (where a branch merged into another branch)
+		ROOT (where a branch has roots)
+		MAIN (versioning and branches - main branch of a certain data point);
+  	  */
+	  relation: String, 	 	// type of relation
+	  related_count: Integer 	// how many data nodes of this type are related to one state of data node
+	  contains: {related: rhizome_related_node}
+  	}
 
-	  state_id: Integer,
+	const rhizome_related_external = rhizome_related_contained;
+	  /*
+		To enable validation of related, interdependent data nodes (which can differ among states):
 
-	  merge_node_id: Integer,
-	  merge_state_id: Integer, // pointer to node state, when branch was merged with another
+	  - If using functionalities of 'node-rhizome', but storing branches, translations (among other types)
+	    as a seperate data node, 'contained' types apply here, too, as defined above
 
-	  eventsWithFields: [actions.platform.create, actions.platform.remove],
+	  - To map relations for reason of validation, relations defined within scope of application,
+	  	externally of 'node-rhizome', use a custom 'relation' descriptor, non-conflicting with 'contained':
+
+		${CUSTOM_RELATION_TYPE} (relation with another interdependent data node, stored in database)
+  	  */
+
+	const rhizome_relation_nosql = {
+	  related: ''; // list of related nodes, within each stored type
+	}
+
+// Type 'multilingual': enables storing content in multiple languages, by adding translations to rhizome
+
+	const translateRequest = {
+
+	  from_language_code: String,
+	  to_language_code: String,
+
+	  eventsWithState: [actions.platform.create, actions.platform.close, actions.platform.remove],
 	  events: [actions.platform.delete]
 	};
 
@@ -93,25 +138,29 @@ const node = {
 
 	If Ethereum is configured with node-rhizome package, hashes are stored there for validation (as an immutable mirror) */
 
-		const state_sql = { // fields, containing data state (SQL version)
+		import {fieldValue, fieldName, fieldDifference} from '../simpleschema-sql/schema.primitives';
+		var stateFieldValue = _.merge({}, { 
+			  state_id: Integer,
+			  table_name: String
+			}, fieldValue);
 
-		  field: String,
-		  value: Text
-		}
-
-		const statechain = { // stores manifested data states in a validatable format
+		const state = { // stores manifested data states in a validatable format
 
 		  sql: {
 		  	node_id: String,
-		  	state_id: Integer,
-		  	contains: {state: state_sql}
+		  	contains: {data: stateFieldValue} /* Also stores:
+		  												
+			
+		  	*/
 		  },
-		  /*nosql: {},*/
+		  nosql: { 
+
+		  /* state fields and values are added here, as schema depends upon collection */ },
 
 		  language_code: String,
 		  machine_translation: String, // provider of machine translation, if any
 
-		  eventsWithFields: [actions.platform.create, actions.platform.remove,
+		  eventsWithState: [actions.platform.create, actions.platform.remove,
 		  					 actions.platform.publish, actions.platform.unpublish],
 
 		  events: [actions.platform.mutate,
@@ -120,44 +169,36 @@ const node = {
 		  		   actions.platform.delete]
 		};
 
-		// ^ merge 'validation' into 'statechain'
+		// ^ extend 'statechain' with 'validation'
 
-			const validation = {
-			  statechain_hash: String
-			  /* Computing this hash takes as seed hash a previous statechain_hash
-			 	(in this branch, or a statechain_hash of state on a branch where it was stemmed from),
-			  	 optionally storing it to Ethereum
+		const validation = {
+		  statechain_hash: String,
+		  statechain_hash_ethereum: String
 
-			  	 Question: What if it was important to include datasets related to this branch at time of hashing? */
-			}
+		  /* Computing this hash takes as seed hash a previous statechain_hash
+		 	(in this branch, or a statechain_hash of state on a branch where it was stemmed from),
+		  	 optionally storing it to Ethereum */
+		}
 
-/* 	Type 'draft': enables one draft per branch
+/* 	Type 'draft': enables one draft per branch */
 
-  	Question: What if it enabled each user to create one draft per branch? */
+		var draftFieldValue = _.merge({}, { 
+			  draft_id: Integer,
+			  table_name: String
+			}, fieldValue);
 
-		const draft = { // recent, manifested state, to be put in statechain
+		const draft = { // recent draft, to be put in statechain
 
-		  sql: { 
+		  sql: {
 		  	node_id: String,
-		  	branch_id: Integer,
-		  	contains: {state: state_sql}
+		  	contains: {data: stateFieldValue}
 		  },
+		  nosql: { /* draft fields and values are added here, as schema depends upon collection */ },
 
 		  language_code: String,
 		  machine_translation: String, // provider of machine translation, if any
 
-		  eventsWithFields: [actions.platform.create, actions.platform.mutate],
-		  events: [actions.platform.delete]
-		};
-
-// Type 'multilingual': enables storing content in multiple languages, by adding translations to rhizome
-
-		const translate = {
-
-		  from_language_code: String,
-		  to_language_code: String,
-
-		  eventsWithFields: [actions.platform.create, actions.platform.close, actions.platform.remove],
+		  eventsWithState: [actions.platform.create, actions.platform.mutate],
 		  events: [actions.platform.delete]
 		};
 
@@ -167,38 +208,50 @@ const node = {
   - events in between a sequence of two materialized states can be removed keeping statechain_hash validation (to reduce storage)
 
     Question: How could datasets related to a data node (not just the contents) leave a trace in 'validation'? */
+		
+		var eventFieldValue = _.merge({}, { 
+			  event_id: Integer
+			}, fieldValue);
+
+		var eventFieldName = _.merge({}, { 
+			  event_id: Integer
+			}, fieldName);
+
+		var eventFieldDifference = _.merge({}, { 
+			  event_id: Integer
+			}, fieldDifference);
 
 		const eventsource = {
 
 		  sql: {
 		  	node_id: String,
-		  	branch_id: Integer,
-
-		  	// How should this be carried out?
-		  	action: String,		// which action was performed
-
-		  	// Serialized changed fields and data ... (+, -, ~)
-		  	action_add: '', 	// array of fields and values which were removed (modified later on)
-		  	action_remove: '', 	// array of names of fields which were added
-
-		  	// diff patch
-		  	action_mutate: '' // array of fields and difference patch of their modified data
+		  	state_id: Integer,
 		  },
-		  //nosql: {},
+
+		  // How should this be carried out?
+		  action: String,		// which action was performed
+
+		  // SQL - Serialized changed fields and data ... (+, -, ~)
+		  contains: {event
+			  added: eventFieldValue, 		 // array of fields and values which were removed (modified later on)
+			  modified: eventFieldName, 	 // array of fields and difference patch of their modified data
+			  removed: eventFieldDifference, // array of names of fields which were added	  	
+		  },
 
 		  eventchain_hash: String, /* Computing this hash takes statechain_hash of previous manifested state as root 
 		  							 (in this branch, or a statechain_hash of state on a branch where it stemmed from),
 		  							  and includes events up to and including recent one */
 
-		  eventsWithFields: [actions.platform.create],
+		  eventsWithState: [actions.platform.create],
 
-		  events: [actions.platform.strip,	// keep events and hashes, but delete data: action_add, action_remove, action_modify
-		  		   actions.platform.clear]	// delete events, hashes and data from 'eventsource'
+		  events: [actions.platform.strip, // keep events and hashes, but delete 'added', 'modified', 'removed' data
+		  		   actions.platform.clear_hashed, 	// delete events data from those states, which are hashed
+		  		   actions.platform.clear_all]		// delete all events from specific node's 'eventsource'
 		};
 
-		/* const signed = {
-			node_eventsource_id: Integer,
-		}; */
+		const signed = {
+
+		};
 
 /* Imagining extending 'signed' to type 'contributors': aggregating a list of agentId's, contributing to a materialized state
 							    								- can be built by taking in 'eventsource' data (if it's there)
@@ -208,12 +261,12 @@ const node = {
 
 // Type 'tree': data point, as nested within a tree structure (relations: hyponomy / hypernymy, synonyms / antonyms)
 
-	const tree_synonym = { 
+	/*const tree_synonym = { 
 
 		synonym_node_id: Integer,
 		synonym_state_id: Integer, // pointer to node state, where branch was stemmed
 
-		eventsWithFields: [actions.platform.create, actions.platform.remove],
+		eventsWithState: [actions.platform.create, actions.platform.remove],
 		events: [actions.platform.delete]
 	};
 
@@ -224,20 +277,14 @@ const node = {
 
 		actions: [actions.platform.create, actions.platform.remove],
 		events: [actions.platform.delete]
-	}
+	}*/
 
 	// const synset = {} 	   // Group of synonyms (eg. WordNet uses this structure - see wordnet.princeton.edu)
 	// const tree_antonym = {} // Node with an opposite meaning in relation to another
 
 /*
+	# 	Imaginary types - see design-questions.js
 
-   Imagining types ...
-
-   # 'seen' - Question: Should there be a list of users / entities who have seen a certain node?
-
-
-   Imaginary type 'reports': enables reporting inappropriate contents, falsifying invalid data
-
-   # Question: Should it be tied to a data node, instead of circles within which data nodes have influence?
-
+   		'seen' - enables recording who has given attention to data node and when
+   		'reports': enables reporting inappropriate contents, falsifying invalid data
 */

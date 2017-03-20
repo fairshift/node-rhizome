@@ -2,10 +2,10 @@
 
 	# node-rhizome: Package to augment existing data collections with a list of general data structures
 
-	  - additional, generalized data structures (and functionalities, to be found in another folder !!! revisit)
+	  - additional, generalized data structures (and functionalities, to be found in another folder !!! revise)
 	  - it could be using a NoSQL or a relational SQL database
 
-	  Challenge: fetching related data nodes (schema and GraphQL mapping !!! revisit)
+	  Challenge: fetching related data nodes (schema and GraphQL mapping !!! revise)
 
 	  Challenges expected with NoSQL:
 	  - read / write permissions to various parts of data scheme,
@@ -18,6 +18,7 @@
 !!!	  On second thought: currently, there is a node-rhizome schema design problem when augmenting MongoDB collections,
 	  					 as they can be an array of arrays. With SQL tables this problem doesn't exist.
 
+http://bit.ly/japanese-knotweed-rhizome
 https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Plant_nodes_c.jpg/200px-Plant_nodes_c.jpg */
 
 import {schema} from 'schema';
@@ -53,7 +54,7 @@ import Rhizome from 'rhizome';
 				 customSchema},
 				 knex);
 
-	Rhizome.update( !!! revisit )
+	Rhizome.update( !!! revise )
 
   ( ? searchRhizome )
 
