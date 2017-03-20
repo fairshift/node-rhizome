@@ -6,10 +6,11 @@
 
 import * from 'json-schema'; // http://json-schema.org/ format
 import * from '../meteor-json-simple-schema/json-simple-schema.js'; // transpile from json-schema to simpl-schema
+//
 import SimpleSchema from 'simpl-schema';							// library, which validates inputs 
 																	//(compatible with Meteor/MongoDB)
 
-import {Text, Integer} from '../node-rhizome-helpers/types';
+import {Text, Integer} from 'helpers/types';
 import lodash as _ from 'lodash';
 
 
@@ -58,7 +59,8 @@ var node = {
 		DHT - "distributed sloppy hash table" (DHT) for storing peer contact information for "trackerless" torrents. 
 		In effect, each peer becomes a tracker. http://bittorrent.org/beps/bep_0005.html 
 
-		Typically stores a list of data providers and a way to access each - ${host}:${port} */
+		Typically stores a list of data providers and a way to access each - ${host}:${port} 
+		https://www.npmjs.com/search?q=dht */
 	};
 
 /* 	
@@ -138,7 +140,7 @@ var node = {
 
 	If Ethereum is configured with node-rhizome package, hashes are stored there for validation (as an immutable mirror) */
 
-		import {fieldValue, fieldName, fieldDifference} from '../simpleschema-sql/schema.primitives';
+		import {fieldValue, fieldName, fieldDifference} from 'helpers/types';
 		var stateFieldValue = _.merge({}, { 
 			  state_id: Integer,
 			  table_name: String
