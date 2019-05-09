@@ -1,0 +1,11 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+
+    "title": "Living entity",
+    "properties": {
+        "context_id": {"type": "string"},
+        "context": {"type": "string"},
+        "color_hex": {"type": "string"}
+    },
+    "required": ["context_id", "context", "color_hex"]
+}

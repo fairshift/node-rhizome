@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+
+    "title": "Timestamps",
+    "properties": {
+        "time_created": {"type": "number"},
+        "time_updated": {"type": "number"},
+        "time_removed": {"type": "number"},
+
+        "time_closed": {"type": "number"},
+        "time_reopen": {"type": "number"},
+        
+        "time_published": {"type": "number"},
+        "time_unpublished": {"type": "number"},
+
+        "time_tied": {"type": "number"},
+        "time_untied": {"type": "number"},
+
+        "time_last_visited": {"type": "number"},
+
+        "time_applied": {"type": "number"},
+        "time_confirmed": {"type": "number"},
+        "time_fulfilled": {"type": "number"},
+    }
+}

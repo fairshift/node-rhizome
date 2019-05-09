@@ -1,0 +1,22 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+
+    "title": "Offer of goods, services or non-monetary gestures",
+    "properties": {
+        "offer_id": {"type": "string"},        
+        "author": { "$ref": "./ref-entity-avatar.json" },
+        "timestamps": { "$ref": "./ref-timestamps.json" },
+
+        "language": {"type": "string"},
+        "location": { "$ref": "http://json-schema.org/geo" },
+
+        "offer": {"type": "string"},
+        "resources": { "$ref": "./ref-resource.json" },
+        "services": { "$ref": "./ref-service.json" },
+        "gestures": { "$ref": "./ref-gesture.json" },
+
+        "applications": {"$ref": "./ref-entity-avatar.json" },
+        "confirmed": {"$ref": "./ref-entity-avatar.json" }
+    },
+    "required": ["offer_id", "author", "timestamps", "offer"]
+}

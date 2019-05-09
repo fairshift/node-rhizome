@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+
+    "title": "Hash chain for safeguarding valid relations among states and data nodes",
+
+	"type": "object",
+	"properties": {
+		"algorithm": {"type": "string"},
+		"hash": {"type": "string"},
+		"external_validation": {
+			"type": "object",
+		    "properties": {
+    			"ethereum_address": { "type", "string" }
+    		}
+    	}
+    }
+}

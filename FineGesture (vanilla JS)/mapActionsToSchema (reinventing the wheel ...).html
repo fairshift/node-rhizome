@@ -1,0 +1,45 @@
+
+
+<html>
+<body>
+
+<div id="test"></div>
+
+<script type="text/javascript">
+
+var actionsArray = {};
+actionsArray = [.register];
+
+agentsArray = ['user', 'entity'];
+
+console.log(Object.keys(actionsArray).length);
+console.log(agentsArray.length);
+
+function actionSchema(actionsArray){ // agentsArray = ['user_id', 'entity_id']
+
+    var schemaArray = {};
+    var tempObj = [];
+
+  	for(var action in actionsArray) {
+  	 if(actionsArray.hasOwnProperty(action)) {
+
+  	  var enacted = action + actionsArray[action].substr(1);
+
+        for(n = 0; n < agentsArray.length; n++){
+
+  		    console.log(enacted+ "_" + agentsArray[n]);
+          tempObj[enacted+ "_" + agentsArray[n]] = String;
+
+        }
+       }
+  	}
+
+	  console.log(tempObj);
+    return tempObj;
+}
+
+console.log(actionSchema(actionsArray, agentsArray));
+
+</script>
+</body>
+</html>

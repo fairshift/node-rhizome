@@ -1,0 +1,47 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+
+    "title": "Referenced living entity",
+    "type": "object",
+    "properties": {
+        "entity_id": {
+            "description": "The unique identifier for an entity with agency",
+            "type": "string",
+        },
+        "timestamps": {"$ref": "./ref-timestamps.json" },
+        
+        "name": {
+            "description": "URL of a living entity's profile",
+            "type", "string",
+        },
+        "profilePicture": {
+            "type": "string",
+        }
+        "values": {
+            "type": "object",
+            "properties": {
+                "value_id": {"type": "string"},
+                "value": {"type": "string"},
+
+                "contexts": {
+
+                    "type": "object",
+                    "properties": {
+                        "context_id": {"type": "string"},
+                        "context": {"type": "string"},
+                        "color_hex": {"type": "string"},
+
+                        "values": {
+
+                            "type": "object",
+                            "properties": {
+                                "value_id": {"type": "string"},
+                                "value": {"type": "string"}
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

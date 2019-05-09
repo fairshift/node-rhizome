@@ -1,0 +1,128 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+
+    "title": "Living entity",
+    "type": "object",
+    "properties": {
+        "entity_id": {
+            "description": "The unique identifier for an entity (with agency of online platforms)",
+            "type": "string",
+        },
+        "name": {
+            "type": "string",
+        },
+        "profilePicture": {
+            "type": "string",
+        },
+        "languages": {
+            "type": "object",
+            "properties": {
+                "language_id": {"type": "string"},
+                "order": {"type": "number"}
+            }
+        }
+        "externalServices": {
+            "description": "Connected external services (in combination with 'passport-js' Node.js package)",
+            "type": "object",
+            "properties": {
+                "service": "string",
+
+                "profileUrl": {
+                    "description": "URL of a living entity's profile",
+                    "type": "string",
+                },
+
+                "contexts": { "$ref": "./context.json" }
+            }
+        },
+        "contexts": { "$ref": "./context.json" },
+        "values": {
+            "type": "object",
+            "properties": {
+                "value_id": {"type": "string"},
+                "value": {"type": "string"},
+
+                "timestamps": {
+                    "$ref": "./ref-timestamps.json"
+                },
+
+                "contexts": {
+
+                    "type": "object",
+                    "properties": {
+                        "context_id": {"type": "string"},
+                        "context": {"type": "string"},
+
+                        "timestamps": {
+                            "$ref": "./ref-timestamps.json"
+                        },
+
+                        "color_hex": {"type": "string"},
+
+                        "values": {
+
+                            "type": "object",
+                            "properties": {
+                                "value_id": {"type": "string"},
+                                "value": {"type": "string"},
+
+                                "timestamps": {
+                                    "$ref": "./ref-timestamps.json"
+                                },
+
+                                "suggested": {
+                                    "$ref": "./ref-entity-avatar.json"
+                                },
+
+                                "service": {"type": "string"},
+
+                                "leaps": {
+                                    "type": "object",
+                                    "properties": {
+                                        "leap_id": {"type": "string"},
+                                        "leap": {"type": "string"},
+
+                                        "timestamps": {
+                                            "$ref": "./ref-timestamps.json"
+                                        },
+
+                                        "location": {
+                                            "description": "Coordinates where leap has taken place",
+                                            "$ref": "http://json-schema.org/geo"
+                                        }
+
+                                        "signed": {
+                                            "$ref": "./ref-entity-avatar.json"
+                                        },
+
+                                        "reflections": {
+                                            "type": "object",
+                                            "properties": {
+                                                "reflection_id": "string",
+                                                "author": { 
+                                                    "$ref": "./ref-entity-avatar.json" 
+                                                },
+                                                "reflection": {"type": "string"},
+                                                "present": { 
+                                                    "$ref": "./ref-entity-avatar.json" 
+                                                },
+                                                "timestamps": { 
+                                                    "$ref": "./ref-timestamps.json" 
+                                                },
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "warehouseLocation": {
+            "description": "Coordinates of the warehouse with the product",
+            "$ref": "http://json-schema.org/geo"
+        }
+    },
+    "required": ["entity_id", "profileUrl", "name"]
+}

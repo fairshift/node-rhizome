@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+
+    "title": "Query schema",
+    "properties": {
+        "keywords": {
+            "type": "object",
+            "properties": {
+                "language": {"type": "string"},
+                "keyword": {"type": "string"},
+                "order": {"type": "number"},
+            }
+        },
+        "languages": {
+            "type": "array",
+            "list": {
+                "type": "string"
+            },
+            "minItems": 1,
+            "uniqueItems": true
+        }
+    }
+}

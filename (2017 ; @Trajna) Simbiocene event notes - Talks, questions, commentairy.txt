@@ -1,0 +1,76 @@
+Platforma, mesec maj, ...
+Slovenska (produkcija?) prepoznan element
+Biodiverziteta, čebele, krepitev
+
+Cvetoče rastline cvetijo hitreje kot včasih
+Zlata rozga
+
+1. predavanje - Inga, Detroit
+- describes change (crisis) [picture of change]
+- 2005, getting to know the city more, getting active
+- crisis, question for citizens - criterium and processes to choose?
+- ghetto palm, originating in china (grows very fast when left unattended; anarchic invasiveness; significant plant)
+	- post-industrial resource -> home-made mill
+	- informal network, gathering around different projects (artists, local activities with international audience)
+	- lack of income: General Motors sponsoring artist collective's work; infrastructure collapsed; Obama's support programme
+	- [cancer? heard correctly? does he mean of crisis?]
+	- lack of employment, suicide rate rised
+	- products: [1 typist left out]; conference table (San Diego university); Holland car/truck tires in a sculpture (climate change, mobility keyword); commercial for superbowl (unpredictive combinations, luxury and future)
+	- woodshop - car tires protect young trees (ghetto palms) as they grow, determining life time (14 years of tree growth); a car sign shows progress of the workshop; artwork seen from the road, impact is different from just trees; trees grow slowly
+	- still working on projects: abandoned houses / blocks > escape path video ("yux*something detroit part 1"; correct one with Tony Hawk foundation) - skateboards, parks, known skaters, artists - drug houses, abandonment > they took action (find money, artists work on houses, give out skatepark to the city and community who manages) - "a sanctuary for the daily drama that goes on", "hope", "eyes of the world are on Detroit right now", "tremendous opportunity - a positive one" - last year / this year: 
+
+Q: What are you working on?
+- heritage space (arts practice, vietnamese artists)
+
+Q: What keeps you interested?
+- ailantus altissima survives human environment (traffic, air conditions)
+
+Q: ?
+- original plants and trees, invasion (thinking these terms is a mistake)
+
+Q: Specific quality of wood, characteristics and ways to use
+- material carries a meaning: is a post industrial resource, tree which followed industrialization; as an artist he finds it interesting to use - qualities are not so important to him; experiments, different forms of drying and procuring the wood; center of communication
+
+
+
+2. predavanje - Vloga dreves v urbanem okolju (Tisa podjetje)
+- kaj je drevo? potrebe zarast?
+- kje in kako živi mestno drevo?
+- vloge dreves?
+- izzivi vzdrževalcev?
+- kaj lahko naredi (@?)?
+
+Tisa - gozdarsko podjetje (mulčenje, gozdarstvo, urejanje površin in čiščenje terena, predelava lesa in prodaja)
+- lesno maso prodajajo naprej, ali pa kot sekance v stroje, proizvodnja "melije [correct?]"
+- drevo: lesnata trajnica s praviloma enim glavnim deblom višine nad 5 m (R.Brus); največji, najbolj masivni in najdalj živeči organizmi na svetu (več 10 let); višina je variabilna
+- kaj drevesa potrebujejo za rast? dovolj vode, primerno temperaturo, svetlobo (različne zahteve); škodljivci
+- kakšna bo rast? drevo naj bo zdravo, varno, lepo (ne poškodovano); preveč vode, slaba tla; ista vrsta raste različno glede na dejavnike na lokaciji; v gozdu se samo zasadi in zaraste, ter raste celo življenje na istem mestu - v mestu se goji seme > sadike > drevesa (drevesa tako prepotujejo tudi celo Evropo in gredo na različne celine)
+- deli drevesa: korenine, deblo, krošnja (zbita tla so smrt za drevesa; pomanjkanje kisika je tudi težava)
+- izguba korenin: odstranitev ene veje korenin prizadane vitalnost drevesa, odstranitev dveh vej korenin pa poškoduje drevo
+- mesta so dandanes bolj intenzivno uporabljan prostor in tako drevesa težje rastejo; kolaps drevesa na zelenicah [?]
+- odgovornost vzdrževalcev zelenic: kot predstavnica podjetja, ki vzdržuje mestna drevesa čuti odgovornost (če koga motijo padajoči listi - reševanje tega ni pravi pristop)
+- kakšna drevesa si želimo? urbanisti ...; poganjki so lahko nevarni (veje se sušijo in razkrajajo, drevo postane nevarno - slika drevesa: deblo je perfektno, a so vedeli, da počasi odhaja; kdaj navidez lepa in zdrava drevesa odstranijo zaradi varnosti; gljive; dogajanje v krošnji; zdrav les; ukrepi: odstraniti vrh(ove))
+- vloge dreves: ekološka (5-10 stopinj C nižja temperatura v senci; izboljšujejo kakovost zraka, ga čistijo, filtrirajo; zadržujejo vodo; zmanjšujejo erozijo; dušenje zvoka; javor 8-10x bolj učinkovit od japonske sofore; utrjujejo brežine; dajejo hrano živalim in tudi ljudem; nudijo zatočišče živalim), gospodarska, družbena (); nepogrešljiva sestavina mesta, vlog se z razvojem mesta stopnjuje, struturno, estetsko, oblikovno in ekološko prispevajo k podobi in kakovosti mestnega okolja
+- yikes: menjava fasade in požagajo vsa drevesa okrog stavbe; hujskanje, da je drevo nevarno
+
+
+
+Chrome / Firefox extension
+- establishing a structure of roots - how data sequenced in a time series is interrelated by symbols demeaning topics, motivations and values?
+
+Background script:
+- while browsing a facebook feed (news or user profile), script extracts - posts and  meta data [template to figure out data fields - update dynamically, detect Facebook variations]
+- finding patterns: current user selected (or preset) keywords go into feed subcategories (own profile); database is scavanged for feed's subcategories' - those of user currently on display
+- when a match is detected, the post is inserted into a database temporarily [how to decide which posts should stay for longer?]
+
+Feed augmentation function:
+- when a post with a matched keyword is detected, related posts by the same user are linked in a subtle way (small icon)
+- if settings are set to filter out certain keywords, feed is cleared of posts not matching, saving some to a temporary database [has a capacity, limited by the device (one digit number of mb, and up to 100mb)]
+- if settings are change to show all, the feed is rebuilt out of the temporary database
+
+Popup:
+- icon changes if current website is supported by the service
+- user's keyword preset shows [all; list of each] > on click the feed changes, calling feed augmentation function
+
+Backend database server:
+- currently just local storage (so to prescribe format of data before doing any backend coding at all)

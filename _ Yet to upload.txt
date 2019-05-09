@@ -1,0 +1,20 @@
+
+## Work log
+
+ - reconstruction from GitHub.com/fairshift/lepagesta code commits
+ - from personal log (cv.json)
+
+
+## Web prototypes with site text copies
+
+ - at Global Sustainability Jam 2015
+ - at Leap second 2015
+ - at Global GovJam 2015
+ - at Sixpo 2014
+ - at NGO incubator 2014
+
+
+## Missing pieces
+
+ - prototype for Book of Coworking Gestures (browser extension)
+ 

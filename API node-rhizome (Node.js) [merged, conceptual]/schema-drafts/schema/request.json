@@ -1,0 +1,25 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+
+    "title": "Request of goods and services, or query for gestures",
+    "properties": {
+        "request_id": {"type": "string"},        
+        "author": { "$ref": "./ref-entity-avatar.json" },
+        "timestamps": { "$ref": "../helpers/ref-timestamps.json" },
+
+        "language": {"type": "string"},
+        "location": { "$ref": "http://json-schema.org/geo" },
+
+        "request": {"type": "string"},
+
+        "query": { "$ref": "../helpers/ref-query.json" },
+        "resources": { "$ref": "../helpers/ref-query.json" },
+        "services": { "$ref": "../helpers/ref-query.json" },
+        "gestures": { "$ref": "../helpers/ref-query.json" },
+
+        "watchlist": {"$ref": "./ref-offer.json" },
+        "applications": {"$ref": "./ref-offer.json" },
+        "confirmed": {"$ref": "./ref-offer.json" }
+    },
+    "required": ["request_id", "author", "timestamps", "request"]
+}

@@ -1,0 +1,114 @@
+{
+    "$schema": "http://json-schema.org/draft-06/schema#",
+
+    "title": "Rhizome's stem object - branch head content (for efficiency)",
+    "type": "object",
+    "properties": {
+    	"node_id": {
+    		"description": "Data node ID, unique for each data node across platforms",
+    		"type": "string"
+    	},
+    	"service": {
+    		"description": "External connected service",
+    		"type": "string"
+    	},
+    	"type": {
+    		"description": "Data type (collection, table, API call)",
+    		"type": "string"
+    	},
+    	"document_id": {
+    		"description": "Internal document ID",
+    		"type": "string"
+    	},
+
+		"stem_id": {"type": "string"},
+		"state_id": {"type": "string"},
+		"draft_id": {"type": "boolean"},
+		"language": {"type":"string"},
+
+		"author": { "$ref": "../ref-entity-avatar.json"},
+		"timestamps": { "$ref": "../helpers/ref-timestamps.json"},
+
+		"state": {
+			"type": "object",
+			"properties": {
+				"field": {"type": "string"},
+				"value": {"type": "string"},
+			}
+		},
+
+		"hashchain": {
+			"$ref/ref-hash-chain.json"
+		},
+
+		"related": {
+			"type": "object",
+			"properties": {
+
+				"node_id": {"type": "string"},
+				"stem_id": {"type": "string"},
+				"state_id": {"type":"string"},
+				"state_timestamp": {"type": "number"},
+
+				"author": { "$ref": "../ref-entity-avatar.json"},
+				"timestamps": { "$ref": "../helpers/ref-timestamps.json"},
+
+    			"typeInternal": {
+    				"enum": [
+						"TRANSLATION",
+						"STEM",
+						"TIED",
+						"ROOT",
+						"MAIN"
+					]
+    			},
+    			"typeExternal": {"type": "string"},
+
+				"hashchain": {
+					"$ref/ref-hash-chain.json"
+				}
+			}
+    	
+			"difference": {
+				"type": "object",
+				"properties": {
+					"added": {
+						"type": "object",
+						"properties": {
+							"field": {"type": "string"}
+						}
+					},
+					"removed": {
+						"type": "object",
+						"properties": {
+							"field": {"type": "string"}
+						}
+					},
+					"modified": {
+						"type": "object",
+						"properties": {
+							"diff_patch": {"type": "string"},
+							"levensthein": {"type": "number"}
+						}
+					}
+				}
+			},
+
+			"translateRequests": {
+				"type": "object",
+				"properties": {
+					"node_id": {"type": "string"},
+					"stem_id": {"type": "string"},
+					"state_id": {"type": "string"},
+					"draft_id": {"type": "boolean"},
+
+					"author": { "$ref": "../ref-entity-avatar.json"},
+					"timestamps": { "$ref": "../helpers/ref-timestamps.json"},
+
+					"language_from": {"type": "string"},
+					"language_to": {"type": "string"}
+				}
+			}
+    	}
+    }
+}
