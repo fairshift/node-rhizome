@@ -19,7 +19,8 @@
 // Migrations - SQL
 
 	// Rename tables, rename fields, modify indexes
-
+	// Drop tables, drop fields
+	// Create tables, add fields
 
 // Migrations - NoSql
 	

@@ -10,8 +10,9 @@
 // Call to load a data "node" / "point" 
 // and N(=horizon-cascade) levels of related nodes ...
 function getNode(){
+	
   return null // This function is to be built in controller, not here, because ...
-        // - SQL storage and caching implementation is a decision to be made
+              // - SQL storage and caching implementation is a decision to be made
 } 
 
 
@@ -77,14 +78,22 @@ const getLine = (args) => {
     return err
   sql_where[] = 'id = "${line_id}"'
 
-  // ROOTED: Line / Eventchain that is rooted in current line
-  if(dataset = '*' || dataset = 'rooted'){
-    sql_where[] = 'root_line_id = "${line_id}"' 
-  }
-  // TIED: Line / Eventchain that is tied to current line
-  if(dataset = '*' || dataset = 'tied'){
-    sql_where[] = 'tie_line_id = "${line_id}"' 
-  }
+
+  /* 
+    There's something else to do here, according to a typology like one in
+    './schema-drafts-latest (Feb 2017)/schema.graphql.js'
+  */
+
+    // ROOTED: Line / Eventchain that is rooted in current line
+    if(route['dataset'] == '*' || dataset == 'ROOTED'){
+      sql_where[] = 'root_line_id = "${line_id}"' 
+    }
+    // TIED: Line / Eventchain that is tied to current line
+    if(dataset == '*' || dataset == 'TIED'){
+      sql_where[] = 'tie_line_id = "${line_id}"' 
+    }
+
+  /* \/\ */
 
 
   return
@@ -180,6 +189,11 @@ const getState = (args) => {
   return
   'SELECT * FROM node_state "WHERE '.implode(' AND ', $sql_where).' ORDER BY current DESC, id DESC LIMIT 1'
   }
+}
+
+
+function findNodes(){
+
 }
 
 
