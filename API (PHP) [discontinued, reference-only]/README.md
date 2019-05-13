@@ -32,9 +32,9 @@ In case there is a real need and organizations, which would support this PHP bra
 
 **Node.js modules in active development...**
 
-- [Main node-rhizome package (developed in ./main/getNode.php and related scripts)](github.com/fairshift/node-rhizome)
-- [Histographical gesture-reflection package](github.com/fairshift/node-rhizome/tree/master/Node.js%20API%20%5Bin-development%5D)
-- [Leap Gesture protocol - social media implementation of the forementioned (at leap seconds)](facebook.com/santappl)
+- [Main node-rhizome package (developed in ./main/getNode.php and related scripts)](https://github.com/fairshift/node-rhizome)
+- [Histographical gesture-reflection package](https://github.com/fairshift/node-rhizome/tree/master/Node.js%20API%20%5Bin-development%5D)
+- [Leap Gesture protocol - social media implementation of the forementioned (at leap seconds)](https://facebook.com/santappl)
 
 
 
