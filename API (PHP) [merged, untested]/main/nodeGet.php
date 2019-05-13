@@ -1,45 +1,51 @@
-<?php
-//https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Plant_nodes_c.jpg/200px-Plant_nodes_c.jpg
+<?php // https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Plant_nodes_c.jpg/200px-Plant_nodes_c.jpg
 
-//To-do - support nesting new content on an existing node line that's most relevant
 
-	if(!isset($GLOBALS['nodes'])){
-		$GLOBALS['nodes'] = array(); //is a cache for data for this call (so that a single data node is queried as few times as possible from DB)
+// To-do - support nesting new content on an existing node line that's most relevant
 
-		//TODO - $GLOBALS['sent-nodes'] would be a cache for data sent out in current session, so that a single data node is only sent out once per session (file cache with auth as key, changing per each session)
+
+if(!isset($GLOBALS['nodes'])){
+
+	$GLOBALS['nodes'] = array(); // ... is a cache for data for this call (so that a single data node is queried as few times as possible from DB)
+
+	// TO-DO: $GLOBALS['sent-nodes'] would be a cache for data sent out in current session, so that a single data node is only sent out once per session (file cache with auth as key, changing per each session)
+}
+
+
+/* How content gets returned
+
+* Table response structure (used by data nodes that don't use node structure)
+
+	$GLOBALS['nodes'][$table][$id] = {
+		...{$table},
+		node_id: {$node_id},
+		relations: {$relations_array}
 	}
 
-	/* How content gets returned
 
-	* Table response structure (used by data nodes that don't use node structure)
-	
-		$GLOBALS['nodes'][$table][$id] = $table;
-		$GLOBALS['nodes'][$table][$id]['node_id'] = $node_id;
-		$GLOBALS['nodes'][$table][$id]['relations'] = $relations_array;
+* Node response structure addition
 
-	* Node response structure addition
+	$GLOBALS['nodes'][$table][$id] = $node;
+	$GLOBALS['nodes'][$table][$id]['relations'] = $relations_array; //relations by node and node_* tables
 
-		$GLOBALS['nodes'][$table][$id] = $node;
-		$GLOBALS['nodes'][$table][$id]['relations'] = $relations_array; //relations by node and node_* tables
+	$GLOBALS['nodes'][$table][$id][$dataset_table][$dataset_entry_id] = array('table' => $table_name, 'id' => $entry_id, 'node_id' => $node_id, 'line_id' => $line_id) //datasets related to node_id
 
-		$GLOBALS['nodes'][$table][$id][$dataset_table][$dataset_entry_id] = array('table' => $table_name, 'id' => $entry_id, 'node_id' => $node_id, 'line_id' => $line_id) //datasets related to node_id
+	$GLOBALS['nodes'][$table][$id]['line'][$line_id] = $line_table;
+	$GLOBALS['nodes'][$table][$id]['line'][$line_id][$dataset_table][$dataset_entry_id] = array('table' => $table_name, 'id' => $entry_id, 'node_id' => $node_id, 'line_id' => $line_id) //datasets related to line_id
 
-		$GLOBALS['nodes'][$table][$id]['line'][$line_id] = $line_table;
-		$GLOBALS['nodes'][$table][$id]['line'][$line_id][$dataset_table][$dataset_entry_id] = array('table' => $table_name, 'id' => $entry_id, 'node_id' => $node_id, 'line_id' => $line_id) //datasets related to line_id
+	$GLOBALS['nodes'][$table][$id]['line'][$line_id]['root'][$root_line_id] = array('table' => $table_name, 'id' => $entry_id, 'node_id' => $node_id, 'line_id' => $line_id); //rooted in current line - links to line/node
+	$GLOBALS['nodes'][$table][$id]['line'][$line_id]['tie'][$tie_line_id] = array('table' => $table_name, 'id' => $entry_id, 'node_id' => $node_id, 'line_id' => $line_id); //tied to current line - links to line/node
 
-		$GLOBALS['nodes'][$table][$id]['line'][$line_id]['root'][$root_line_id] = array('table' => $table_name, 'id' => $entry_id, 'node_id' => $node_id, 'line_id' => $line_id); //rooted in current line - links to line/node
-		$GLOBALS['nodes'][$table][$id]['line'][$line_id]['tie'][$tie_line_id] = array('table' => $table_name, 'id' => $entry_id, 'node_id' => $node_id, 'line_id' => $line_id); //tied to current line - links to line/node
+	$GLOBALS['nodes'][$table][$id]['line'][$line_id]['state'][$language_id][$field]['content'] = $state_row_by_field; //latest content state
 
-		$GLOBALS['nodes'][$table][$id]['line'][$line_id]['state'][$language_id][$field]['content'] = $state_row_by_field; //latest content state
+	TO-DO
+	$GLOBALS['nodes'][$table][$id]['line'][$line_id]['state'][$language_id][$field]['trail'][$pointer_state_time]['content'] = $state_row_by_field //past states
 
-		TO-DO
-		$GLOBALS['nodes'][$table][$id]['line'][$line_id]['state'][$language_id][$field]['trail'][$pointer_state_time]['content'] = $state_row_by_field //past states
+* Node_id alias table
 
-	* Node_id alias table
-
-		$GLOBALS['nodes'][$node_id]['table'] = $table; 
-		$GLOBALS['nodes'][$node_id]['id'] = $id;
-	*/
+	$GLOBALS['nodes'][$node_id]['table'] = $table; 
+	$GLOBALS['nodes'][$node_id]['id'] = $id;
+*/
 
     function getNode(){ //A call to load a node and N(=horizon-cascade) levels of related nodes comes...
 

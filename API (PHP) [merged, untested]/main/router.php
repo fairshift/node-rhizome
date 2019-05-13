@@ -4,10 +4,11 @@ function router($call){
 
   $GLOBALS['call_inprocess'];
   if(strpos($call, '/') > 0){
-    $GLOBALS['o'] = $buffer[0]; //object
-    $GLOBALS['f'] = $buffer[1]; //function
+    $o = $GLOBALS['o'] = $buffer[0]; //object
+    $f = $GLOBALS['f'] = $buffer[1]; //function
   } else {
-    $GLOBALS['o'] = $_REQUEST['call']; //object
+    $o = $GLOBALS['o'] = $_REQUEST['call']; //object
+    $f = $GLOBALS['f'] = null
   }
 
   //Social media based authentication - !!! multi-site implementation needs a stored site url to redirect back to
