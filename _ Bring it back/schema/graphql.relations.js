@@ -19,12 +19,16 @@ enum RelationType {
   # Declaration of its main branch
   MAIN
 
+  # Declaration of agents with whom a branch of a data node was shared
+  AGENT
+
   # Custom declaration of a related data node
   RELATED
 
-  # Some more ideas: MIRROR (mirroring another data node),
+  # Some ideas for implementation: 
   # CAUSE (has recognized effects of a related data node),
-  # EFFECT (has recognized its effect to a related data node)
+  # EFFECT (has recognized its effects to a related data node),
+  # MIRROR (mirroring another data node)
 }
 
 `];

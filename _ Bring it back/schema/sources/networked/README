@@ -1,0 +1,8 @@
+Remote online sources, with their distinct protocols:
+- Websites (HTTP/S) - 'permalink URLs' and distinct 'HTML DOM containing elements'
+- APIs (HTTP/S - RESTful, GraphQL, ...): 'URL' routes, arbitrary 'query' names and identifying 'parameters'
+- Sources with own proprietary protocols
+
+As 'routes' to data and its 'schema' are not static in longterm and 
+changes to their routing/naming conventions are usually not communicated in a structured way, 
+there should be a map of current state (consider NPM packages with a generic naming convention)

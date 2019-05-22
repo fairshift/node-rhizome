@@ -32,3 +32,28 @@ const eventSchema = function(actionsArray, agentTypesArray){
 
   return schemaArray;
 }
+
+export validationSchema = function(chainType, ethereumRecordAddress = false){
+
+  var schema = {};
+
+    for(var key in chain) {
+     if(chain_hash.hasOwnProperty(key)) {
+      if(key.indexOf('ethereum')){
+        if(ethereumRecordAddress == true){
+
+          schema[chainType+key] = chain_hash[key];
+        }
+      } else {
+
+        schema[chainType+key] = chain_hash[key];
+      }
+     }
+    }
+
+    return schema;
+}
+
+export validationSchemaWithEthereum = function(chainType){
+  return validationSchema(chainType, true);
+}

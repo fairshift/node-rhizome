@@ -1,11 +1,10 @@
-/*
 
- # 	Question: Where to evaluate permissions?
+ # 	Where to evaluate permissions?
 
 [X]	outside of this package - in scope of application; ways of access are defined there
  - 	within this package: (!!! revise)
 
- # 	Question: Should each branch of a node have an entry of its own in its collection? 
+ # 	Should each branch of a node have an entry of its own in its collection? 
 
    	SQL:
 
@@ -24,9 +23,9 @@
 	  	cached rhizome are a compiled structure, which, according to permissions and requests,
 	  	might need to have parts removed before returned to frontend
 
- #	Question: What if it was important to include related datasets in validation?
+ #	What if it was important to include related datasets in validation?
 
- # 	Question: Should each translation of a node have an entry of its own in its collection?
+ # 	Should each translation of a node have an entry of its own in its collection?
 
    	SQL:
 
@@ -35,15 +34,18 @@
 
  -  No: (!!! revise)
 
- # 	Question: Should reports be tied to a data node, instead of to circles (groups) where data nodes have influence?
+ # 	Should reports be tied to a data node, instead of to circles (groups) where data nodes have influence?
 
- # 	Question: Should there be a list of users / entities who have seen (given attention) to a certain data node?
+ # 	Should there be a list of users / entities who have seen (given attention) to a certain data node?
 
- #	Question: What if each user was able to create their draft version in branch?
+ #	What if each user was able to create their draft version in branch?
 
- # 	Question: How to map connected services (or peers) which store a unique data node (in a DHT type list), 
+ # 	How to map connected services (or peers) which store a unique data node (in a DHT type list), 
               	  when these services/peers have conflicting permissions (rights/privileges) to access data nodes / resources?
 
        (on Bittorrent's DHT "distributed sloppy hash table" protocol - http://bittorrent.org/beps/bep_0005.html)
  
-*/
+ #  How would a change in API route be recognized? 
+ #  How would a change in data scheme at remote API point affect a node?
+
+ #  Which storage medium / service to choose to store a global list of registered data nodes and validation hashes?

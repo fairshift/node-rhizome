@@ -54,6 +54,8 @@ import Rhizome from 'rhizome';
 				 customSchema},
 				 knex);
 
+	Rhizome.parseCurrent({node_current, languages});
+
 	Rhizome.update( !!! revise )
 
   ( ? searchRhizome )

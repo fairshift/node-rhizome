@@ -1,21 +1,19 @@
-# node-rhizome
 
-Augmenting existing data collections (for Node.js), providing:
+In application container, outside of 'node-rhizome' package the following must occur: a variant of rhizomeTrie needs to be supplied with a corresponding 'JS function output object', 'collection (MongoDB)' / 'table (SQL)'
 
-- multilingual content and branches
-- storing state of data and its relations, enabling validation
-- GraphQL endpoint
+```js
 
-Currently in question - which storage medium to choose?
+const rhizomeTrie_variant = {
+  'rzState': {
+    'eventchain': {$: 0}
+  },
+  'leapchain': {
+    'rzState': {$: 0}
+  },
+}
 
-- SQL requires storing additional cache record somewhere else, as structure
-of 'node-rhizome' database tables is quite complex
+const dbRz = rhizomeInit({
+	${nodeNamespace}: rhizomeTrie_variant
+})
 
-- NoSQL can store 'node-rhizome' schema as appendix to a document, or as a standalone document ... But which to choose? MongoDB (popular, compatible with Meteor), Couchbase / PouchDB (replication among various devices, multidimensional indexing)
-
-External storage of hashed state of data and its relations
-- Ethereum
-
-
-
-Some inspirations for this package can currently be found in 'helpers/index.js' file
+```

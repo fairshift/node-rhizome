@@ -37,3 +37,36 @@ export const fieldDifference = { // Field difference in relation to previous sta
 export const fieldName {  // Field name schema
   field: String
 }
+
+const chain = {
+	chain_hash: String,
+	chain_hash_ethereum_address: String,
+}
+/* 	Computing this hash takes as seed hash a previous statechain_hash or eventchain_hash,
+	found within current branch, be it a clone of a state in branch where it was stemmed from, or not
+	- optionally storing it to Ethereum */
+
+export validationSchema = function(chainType, ethereumRecordAddress = false){
+
+	var schema = {};
+
+  	for(var key in chain) {
+   	 if(chain_hash.hasOwnProperty(key)) {
+   	  if(key.indexOf('ethereum')){
+      	if(ethereumRecordAddress == true){
+
+      	  schema[chainType+key] = chain_hash[key];
+      	}
+   	  } else {
+
+      	schema[chainType+key] = chain_hash[key];
+   	  }
+     }
+    }
+
+    return schema;
+}
+
+export validationSchemaWithEthereum = function(chainType){
+	return validationSchema(chainType, true);
+}

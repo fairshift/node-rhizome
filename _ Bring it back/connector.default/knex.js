@@ -2,9 +2,13 @@ import SimpleSchema from 'simpl-schema';
 import lodash from 'lodash';
 import {Integer, UniqueInteger, UniqueString} from 'types';
 
+/* Parse JSON schema to SimpleSchema
+import meteor-json-simple-schema/json-simple-schema.js
+https://github.com/bshamblen/meteor-json-simple-schema/blob/master/json-simple-schema.js */
+
 // Generate tables from schema array (before applying SimpleSchema on it), and then createTable with Knex
 
-export const createTable = function(knex, name, schemaArray){
+export const createTables = function(name, schemaArray, knex){
 
 	// Create table
 
@@ -15,10 +19,12 @@ export const createTable = function(knex, name, schemaArray){
 		    return knex.schema.createTable(name, function(table) {
 
 		    	var id_was_set = false,
-
 		    		max_length = 0,
-
 		    		uniqueFields = [];
+
+		    	if(typeof schemaArray.sql){
+		    		//!!!
+		    	}
 
 		  		for(var field in schemaArray) { // http://stackoverflow.com/questions/14810506/map-function-for-objects-instead-of-arrays
 		   		 if(schemaArray.hasOwnProperty(field) && field != 'contains') {
@@ -104,12 +110,25 @@ export const createTable = function(knex, name, schemaArray){
 	for(var field in schemaArray){ // http://stackoverflow.com/questions/14810506/map-function-for-objects-instead-of-arrays
 									// Question: Is _.map slower than "for(var key in myObject) {"
 
-	 	if(schemaArray.hasOwnProperty(field) && field == 'contains') {
+	 	if(field == 'contains') {
 		
 			for(var table in schemaArray[field]) {
 
-				createTable(table, schemaArray[field][table]);
+				createTables(name+"_"+table, schemaArray[field][table]);
 			}
 	 	}
 	}
+}
+
+const parseSchema = function(schemaArray, sql = true){
+
+	var fields = [];
+
+	if(sql == true){
+		sql = schemaArray.sql;
+
+
+	}
+
+	return SimpleSchema(schemaArray);
 }
