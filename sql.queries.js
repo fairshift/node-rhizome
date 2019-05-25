@@ -10,18 +10,17 @@
 
 const getNodeByLanguages = (args) => {
   
-    var { collection, node_id, line_id, language_id, languages } = args
+  var { collection, node_id, line_id, language_id, languages } = args
 
-    languages = (typeof language_id !== 'undefined') 
-                 ? language_id
-                 : '(' + languages.join(' OR ') + ')'
+  languages = (typeof language_id !== 'undefined') 
+               ? language_id
+               : '(' + languages.join(' OR ') + ')'
 
-    return
-    `SELECT ${schema} FROM "${collection}_state" ` +
-    `WHERE node_id = "${node_id}" ` +
-    `AND line_id = "${line_id}" ` +
-    `AND language_id IN ${languages}`
-  }
+  return
+  `SELECT ${schema} FROM "${collection}_state" ` +
+  `WHERE node_id = "${node_id}" ` +
+  `AND line_id = "${line_id}" ` +
+  `AND language_id IN ${languages}`
 }
 
 

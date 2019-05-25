@@ -10,7 +10,7 @@ import { NodeState } from './types/nodeState'
 import { NodeStatechain } from './types/validation'
 import { 
   getStateByLanguages, getLine, getManifestedState,
-} from 'sql.queries'jujujjkkkikikikikikikikikikikiikikiki
+} from 'sql.queries'
 
 // Validation tables ...
 import { Eventchain, Leapchain } from './types/validation'
@@ -52,7 +52,7 @@ const NodeState_gql = () => {
 const getNodeStates = () => { return {
   __defaultType: NodeState,
   byLanguage: {
-    'O': getNodeByLanguage,
+    'O': getStateByLanguages,
     'i': __,
     'v': ['#obj', 'rhizome', 'signatures', 'actions'],
     rYz: []
